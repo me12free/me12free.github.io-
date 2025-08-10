@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>John Ekiru — Interactive Resume | AI Powered Terminal</title>
+    <!-- SEO & Social Sharing Metadata -->
+  <meta name="description" content="This is John Ekiru's portfolio containing projects, blog posts, resume and contact information.">
+  <meta name="keywords" content="portfolio, resume, blog, projects, developer, software engineer">
+  <meta name="author" content="John Ekiru">
+  <meta name="creator" content="John Ekiru">
+  <meta name="publisher" content="John Ekiru">
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <link rel="author" href="https://www.linkedin.com/in/john-ekiru-2797a01b3/">
+  <link rel="me" href="https://github.com/me12free">
+  <link rel="me" href="https://www.salesforce.com/trailblazer/jekiru">
+  <link rel="canonical" href="https://github.com/me12free">
+  <!-- Open Graph -->
+  <meta property="og:title" content="John Ekiru's Portfolio">
+  <meta property="og:description" content="This is John Ekiru's portfolio containing projects, blog posts, resume and contact information.">
+  <meta property="og:url" content="https://github.com/me12free">
+  <meta property="og:site_name" content="John Ekiru">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="media/profile.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="John Ekiru Portfolio">
+  <meta property="og:type" content="website">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@me12free">
+  <meta name="twitter:title" content="John Ekiru's Portfolio">
+  <meta name="twitter:description" content="This is John Ekiru's portfolio containing projects, blog posts, resume and contact information.">
+  <meta name="twitter:image" content="media/profile.jpg">
+    <!-- Favicon & Preload Fonts -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon" sizes="16x16">
+    <link rel="icon" href="favicon.ico">
+    <link rel="preload" href="fonts/your-font.woff2" as="font" crossorigin="anonymous" type="font/woff2">
+  <!-- Vanilla Tilt for 3D card effect -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"></script>
+  <style>
+    @media (max-width: 900px) {
+      .flip-card {
+        width: 100vw;
+        height: 320px;
+        margin-bottom: 16px;
+      }
+      .flip-card-inner {
+        padding: 0;
+      }
+      .flip-card-front, .flip-card-back {
+        padding: 14px 4vw 12px 4vw;
+      }
+      .flip-card h2 {
+        font-size: 1.08rem;
+      }
+      .terminal {
+        width: 100vw;
+        min-width: 0;
+        max-width: 100vw;
+        padding: 8px;
+        border-radius: 8px;
+      }
+      main {
+        padding: 8px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .topbar {
+        flex-direction: column;
+        gap: 6px;
+        padding: 8px 6px;
+        align-items: stretch;
+      }
+      .brand {
+        font-size: 1rem;
+        text-align: center;
+      }
+      .controls {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .controls select, .controls button {
+        padding: 6px;
+        font-size: 0.98rem;
+        min-width: 80px;
+      }
+      #terminal-input-line {
+        flex-direction: column;
+        gap: 6px;
+        align-items: stretch;
+      }
+      .prompt {
+        min-width: 0;
+        margin-bottom: 4px;
+      }
+    }
+    @media (max-width: 600px) {
+      .flip-card {
+        height: 220px;
+      }
+      .flip-card-front img {
+        width: 60px !important;
+        height: 60px !important;
+      }
+      .flip-card h2 {
+        font-size: 0.98rem;
+      }
+      .terminal {
+        font-size: 0.97rem;
+        padding: 4px;
+      }
+      .topbar {
+        padding: 4px 2px;
+      }
+      main {
+        padding: 4px;
+      }
+    }
+    .flip-card {
+      background: transparent;
+      width: 340px;
+      height: 420px;
+      perspective: 1200px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s cubic-bezier(.2,.9,.2,1);
+      transform-style: preserve-3d;
+      will-change: transform;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #e6f7e6;
+      padding: 28px 22px 22px 22px;
+      box-sizing: border-box;
+      left: 0;
+      top: 0;
+    }
+    .flip-card-front, .flip-card-back {
+      background: rgba(34,38,52,0.55); /* semi-transparent for video show-through */
+      color: #e6f7e6;
+    }
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+    .flip-card h2 { margin:0 0 8px 0;font-size:1.35rem;font-weight:700;letter-spacing:0.5px; }
+    .flip-card .flip-hint { position:absolute;bottom:18px;left:0;width:100%;text-align:center;font-size:0.95rem;color:#ffd700;opacity:0.8; }
+    .flip-card a { color:#ffd700;text-decoration:none; }
+    .flip-card-back .section { margin-bottom:12px; }
+    .flip-card-back .section-title { font-weight:700; color:#00ff90; margin-bottom:4px; }
+    .flip-card-back ul { margin:0; padding-left:18px; }
+  </style>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Monospace font -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- html2pdf for PDF download (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+</head>
+
+<body class="theme-night">
+  <div id="app">
+    <header class="topbar" role="banner">
+      <div class="brand">John Ekiru — Software Developer</div>
+      <div class="controls" role="toolbar" aria-label="Actions">
+        <select id="themeSelect" aria-label="Theme selector">
+          <option value="night">Night</option>
+          <option value="solar">Solar</option>
+          <option value="matrix">Matrix</option>
+        </select>
+        <a href="media/John Ekiru CV 2025.pdf" download="John Ekiru CV 2025.pdf" class="cv-download-btn" style="margin-left:8px;padding:6px 12px;background:#00ff90;color:#222;border-radius:6px;text-decoration:none;font-weight:600;">Direct CV Download</a>
+        <div class="media-controls" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-left:16px;">
+          <label style="display:flex;align-items:center;gap:4px;"><input type="checkbox" id="playThemeVideo" checked> <span style="font-size:0.98rem;">Video</span></label>
+          <select id="videoSelect" style="min-width:110px;"></select>
+          <label style="display:flex;align-items:center;gap:4px;"><input type="checkbox" id="playThemeAudio" checked> <span style="font-size:0.98rem;">Music</span></label>
+          <select id="audioSelect" style="min-width:110px;"></select>
+        </div>
+      </div>
+    </header>
+    <main>
+  <!-- Theme Background Video for terminal -->
+  <video id="theme-bg-video" autoplay loop muted playsinline style="position:fixed;z-index:-1;top:0;left:0;width:100vw;height:100vh;object-fit:cover;opacity:0.18;pointer-events:none;transition:opacity 0.5s;"></video>
+  <!-- Theme Background Audio -->
+  <audio id="theme-bg-audio" loop style="display:none;"></audio>
+  <!-- Flip 3D Card Component -->
+  <div class="main-flex">
+  <!-- Flipcard background video for card only -->
+  <video id="flipcard-bg-video" autoplay loop muted playsinline style="position:absolute;z-index:0;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.22;pointer-events:none;transition:opacity 0.5s;"></video>
+  <div id="profile-3d-card" style="display:flex;justify-content:center;"></div>
+    <div id="terminal-container" class="terminal" role="region" aria-label="Interactive resume terminal">
+      <div id="terminal-output" role="log" aria-live="polite" tabindex="0"></div>
+      <div id="terminal-input-line">
+        <span class="prompt" id="prompt">ekiru@portfolio:~$</span>
+        <input id="terminal-input" type="text" autocomplete="off" autofocus aria-label="Terminal input" />
+      </div>
+    </div>
+  </div>
+
+      <!-- Help overlay (toggle with '?') -->
+      <div id="helpOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+        <div class="overlay-content">
+          <h2 id="helpTitle">Help & Shortcuts</h2>
+            <span class="prompt" id="prompt">john@ekiru.dev:~$</span>
+          <pre id="helpContents"></pre>
+          <button id="closeHelp">Close</button>
+        </div>
+      </div>
+
+      <!-- Image Lightbox -->
+      <div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true">
+        <button class="lb-close" aria-label="Close">✕</button>
+            <p>Type any commands listed below. Use <kbd>Tab</kbd> for completion, <kbd>Ctrl+L</kbd> to clear, <kbd>Ctrl+K</kbd> to focus input. Welcome to my portfolio terminal!</p>
+      </div>
+    </main>
+
+    <footer>
+      <footer class="modern-footer">
+        <div class="footer-content">
+          <span>Built with <span style="color:#ff6b35;">&#10084;&#65039;</span> by John Ekiru</span>
+          <span class="footer-links">Type <code>help</code> to get started &mdash; Deep links: <code>#about</code>, <code>#skills</code>, <code>#experience</code></span>
+        </div>
+        <div class="footer-copyright">
+          &copy; <span id="footer-year"></span> John Ekiru. All rights reserved.
+        </div>
+      </footer>
+    </footer>
+  </div>
+
+  <!-- App script -->
+  <script src="script.js"></script>
+  <script>
+    // Set dynamic year in footer
+    window.addEventListener('DOMContentLoaded', function() {
+      var yearSpan = document.getElementById('footer-year');
+      if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+    });
+  </script>
+  <script>
+    // Render Flip 3D card with Vanilla Tilt
+    window.addEventListener('DOMContentLoaded', function() {
+      // Dynamically populate video/audio selects from media folder
+      function fetchMediaFiles(exts, cb) {
+        const files = [
+          'media/solar.mp4',
+          'media/matrix.mp4',
+          'media/rename.mp4',
+          'media/CampusBite.webm',
+          'media/allmobile.mp4',
+          'media/Aylex - Last Summer (freetouse.com).mp3',
+          'media/Pufino - Enlivening (freetouse.com).mp3'
+        ];
+        cb(files.filter(f => exts.some(e => f.endsWith(e))));
+      }
+      // Theme default videos per theme
+      const themeDefaults = {
+        night: 'media/matrix.mp4',
+        solar: 'media/solar.mp4',
+        matrix: 'media/matrix.mp4'
+      };
+      fetchMediaFiles(['.mp4','.webm'], function(videoFiles) {
+        var videoSelect = document.getElementById('videoSelect');
+        if (videoSelect) {
+          videoSelect.innerHTML = '';
+          videoFiles.forEach(function(f) {
+            var opt = document.createElement('option');
+            opt.value = f;
+            opt.textContent = f.split('/').pop();
+            videoSelect.appendChild(opt);
+          });
+          // Set default video for current theme
+          var theme = document.body.className.replace('theme-','') || 'night';
+          videoSelect.value = themeDefaults[theme] || videoFiles[0];
+        }
+      });
+      fetchMediaFiles(['.mp3','.wav','.ogg'], function(audioFiles) {
+        var audioSelect = document.getElementById('audioSelect');
+        if (audioSelect) {
+          audioSelect.innerHTML = '';
+          audioFiles.forEach(function(f) {
+            var opt = document.createElement('option');
+            opt.value = f;
+            opt.textContent = f.split('/').pop();
+            audioSelect.appendChild(opt);
+          });
+          audioSelect.value = audioFiles[0];
+        }
+      });
+      // Flip card logic
+      var flipCard = document.createElement('div');
+      flipCard.className = 'flip-card';
+      flipCard.innerHTML = `
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="media/ekiru.png" alt="Ekiru PNG" style="width:90px;height:90px;border-radius:12px;box-shadow:0 2px 12px #00ff9060;margin-bottom:16px;">
+            <h2>John Ekiru</h2>
+            <div style="font-size:1.05rem;margin-bottom:8px;">Software Developer</div>
+            <div style="font-size:0.98rem;margin-bottom:6px;">Nairobi, Kenya</div>
+            <div style="font-size:0.97rem;margin-bottom:6px;">Email: <a href="mailto:johnekiru72@gmail.com">johnekiru72@gmail.com</a></div>
+            <div style="font-size:0.97rem;margin-bottom:6px;">Phone: <span style="color:#ffd700;">+254748100347</span></div>
+            <div style="font-size:0.97rem;margin-bottom:6px;">LinkedIn: <a href="https://www.linkedin.com/in/john-ekiru-2797a01b3/" target="_blank">john-ekiru-2797a01b3</a></div>
+            <div style="font-size:0.97rem;margin-bottom:6px;">GitHub: <a href="https://github.com/me12free" target="_blank">me12free</a></div>
+            <div style="font-size:0.97rem;margin-bottom:6px;">Trailblazer: <a href="https://www.salesforce.com/trailblazer/jekiru" target="_blank">jekiru</a></div>
+            <div class="flip-hint">Click to flip for more details</div>
+          </div>
+          <div class="flip-card-back">
+            <img src="media/profile.jpg" alt="Profile Photo" style="width:90px;height:90px;border-radius:50%;box-shadow:0 2px 12px #00ff9060;margin-bottom:16px;">
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;width:100%;">
+              <div style="font-size:1.25rem;font-weight:700;margin-bottom:18px;color:#ffd700;">🎉 Surprise!</div>
+              <div style="font-size:1.08rem;margin-bottom:12px;">Want to know more?</div>
+              <div style="font-size:1.05rem;margin-bottom:18px;">Type <span style="color:#ffd700;font-weight:700;">help</span> in the terminal below to explore my full interactive resume, skills, experience, and more!</div>
+              <div style="font-size:1.1rem;margin-bottom:10px;color:#00ff90;">The real magic happens in the terminal. 🚀</div>
+            </div>
+            <div class="flip-hint" style="color:#ffd700;">Click to flip back</div>
+          </div>
+        </div>
+      `;
+      document.getElementById('profile-3d-card').appendChild(flipCard);
+      // Vanilla Tilt only on front
+      if (window.VanillaTilt) {
+        VanillaTilt.init(flipCard.querySelector('.flip-card-front'), {
+          max: 18,
+          speed: 400,
+          glare: true,
+          'max-glare': 0.18
+        });
+      }
+      // Flip logic
+      flipCard.addEventListener('click', function() {
+        flipCard.classList.toggle('flipped');
+      });
+      // Listen for theme changes to update default video
+      var themeSelect = document.getElementById('themeSelect');
+      if (themeSelect) {
+        themeSelect.addEventListener('change', function(e) {
+          var theme = e.target.value;
+          var videoSelect = document.getElementById('videoSelect');
+          if (videoSelect && themeDefaults[theme]) {
+            videoSelect.value = themeDefaults[theme];
+            videoSelect.dispatchEvent(new Event('change'));
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

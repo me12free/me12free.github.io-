@@ -1,0 +1,638 @@
+/* Solar theme: make terminal commands and output white for visibility */
+.theme-solar .terminal-output-text,
+.theme-solar #terminal-input {
+  color: #fff !important;
+}
+
+/* style.css — updated: centered layout, theme-scoped UI variables, responsive */
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* -------------------------
+  Core / Page-level variables
+  (page background intentionally constant)
+--------------------------*/
+:root {
+  /* page background (kept stable across themes) */
+  --page-bg-1: #07070a;
+  --page-bg-2: #0f0f14;
+
+  /* UI panel defaults (overridden by theme classes) */
+  --panel-bg-1: rgba(34, 40, 49, 0.95);
+  --panel-bg-2: rgba(26, 28, 36, 0.95);
+  --accent: #00ff90;
+  --text: #e6f7e6;
+  --muted: #9aa0b4;
+  --gold: #ffd700;
+
+  /* borders, radii etc */
+  --panel-border: 1.5px solid var(--accent);
+  --radius: 12px;
+  --glass: rgba(255, 255, 255, 0.03);
+}
+
+/* -------------------------
+  Page background + base styles
+--------------------------*/
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--page-bg-1), var(--page-bg-2));
+  font-family: 'Fira Code', monospace, ui-monospace, monospace;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.45;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Topbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  gap: 12px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.06));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(6px);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.3px;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.controls select,
+.controls button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.controls select {
+  min-width: 96px;
+}
+
+/* Main centers terminal vertically between header and footer */
+main {
+  flex: 1;
+  padding: 20px;
+}
+
+.main-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 32px;
+}
+
+@media (max-width: 900px) {
+  .main-flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  #profile-3d-card {
+    margin-bottom: 18px;
+  }
+}
+}
+
+/* Terminal container */
+.terminal {
+  width: min(980px, 96vw);
+  max-width: 1100px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, var(--panel-bg-1), var(--panel-bg-2));
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.6);
+  border: var(--panel-border);
+  min-height: 420px;
+  max-height: 72vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* output area */
+#terminal-output {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 14px;
+  scroll-behavior: smooth;
+  border-radius: 10px;
+  outline: none;
+  max-height: calc(72vh - 80px);
+}
+
+/* input area */
+#terminal-input-line {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 12px;
+  padding: 10px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.14), rgba(255, 255, 255, 0.01));
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.prompt {
+  color: var(--accent);
+  font-weight: 800;
+  margin-right: 16px;
+  min-width: 140px;
+  font-size: 1.18rem;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px #00ff9060;
+}
+
+#terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 1.05rem;
+  padding: 6px;
+  outline: none;
+}
+
+/* terminal line styling */
+.terminal-line {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+  opacity: 0;
+  animation: fadeInLine .7s cubic-bezier(.2, .9, .2, 1) forwards;
+  background: linear-gradient(90deg, rgba(0, 255, 144, 0.04), rgba(255, 255, 255, 0.01));
+  padding: 16px 18px;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 255, 144, 0.08);
+}
+
+.terminal-cmd {
+  color: var(--accent);
+  font-weight: 700;
+  min-width: 120px;
+}
+
+.terminal-output-text {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  color: var(--text);
+  word-break: break-word;
+}
+
+@keyframes fadeInLine {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.section-header {
+  display: inline-block;
+  font-weight: 800;
+  color: var(--accent);
+  margin-right: 8px;
+}
+
+.animated-icon {
+  display: inline-block;
+  transform: scale(0.85) translateY(0);
+}
+
+/* Skill bars */
+.skill-wrap {
+  margin: 8px 0;
+}
+
+.skill-bar-outer {
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 999px;
+  padding: 5px;
+}
+
+.skill-bar-inner {
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold), var(--accent));
+  width: 0%;
+  transition: width 900ms cubic-bezier(.2, .9, .2, 1);
+}
+
+/* code block */
+.code-block {
+  display: block;
+  white-space: pre;
+  overflow: auto;
+  max-height: 420px;
+  background: rgba(8, 10, 12, 0.95);
+  border-radius: 10px;
+  padding: 12px;
+  color: #c7f0c7;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+/* Help overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 60;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-content {
+  background: linear-gradient(180deg, #0f1720, #0b0f14);
+  padding: 20px;
+  border-radius: 12px;
+  width: min(720px, 92vw);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.overlay-content pre {
+  white-space: pre-wrap;
+  color: #cfe9c8;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 80;
+}
+
+.lightbox.hidden {
+  display: none;
+}
+
+.lb-content img {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 10px;
+  display: block;
+}
+
+.lb-close {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Footer */
+footer {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  color: var(--muted);
+}
+
+/* Scrollbar */
+#terminal-output::-webkit-scrollbar {
+  width: 10px;
+}
+
+#terminal-output::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#terminal-output::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent), var(--gold));
+  border-radius: 10px;
+}
+
+/* Responsive tweaks */
+@media (max-width:880px) {
+  .terminal {
+    padding: 14px;
+  }
+
+  .terminal-cmd {
+    min-width: 88px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width:700px) {
+  .controls {
+    gap: 6px;
+  }
+
+  .brand {
+    font-size: 0.97rem;
+  }
+
+  body {
+    font-size: 0.98rem;
+  }
+}
+
+/* THEMES - update UI vars and page background for full theme switch */
+body.theme-night {
+  --page-bg-1: #07070a;
+  --page-bg-2: #0f0f14;
+  --panel-bg-1: #222831;
+  --panel-bg-2: #1a1c24;
+  --accent: #00ff90;
+  --text: #e6f7e6;
+  --muted: #9aa0b4;
+  --gold: #ffd700;
+  --panel-border: 1.5px solid var(--accent);
+  background: linear-gradient(180deg, var(--page-bg-1), var(--page-bg-2)) !important;
+  color: var(--text) !important;
+}
+
+body.theme-solar {
+  --page-bg-1: #fffaf1;
+  --page-bg-2: #ffe7c7;
+  --panel-bg-1: #fff6ea;
+  --panel-bg-2: #ffe7c7;
+  --accent: #ff6b35;
+  --text: #2d2d2d;
+  --muted: #a67c52;
+  --gold: #ffb84d;
+  --panel-border: 1.5px solid rgba(255, 107, 53, 0.9);
+  background: linear-gradient(180deg, var(--page-bg-1), var(--page-bg-2)) !important;
+  color: var(--text) !important;
+}
+
+body.theme-matrix {
+  --page-bg-1: #071013;
+  --page-bg-2: #04100a;
+  --panel-bg-1: #071013;
+  --panel-bg-2: #04100a;
+  --accent: #00ff00;
+  --text: #cfffcc;
+  --muted: #66ff66;
+  --gold: #66ff66;
+  --panel-border: 1.5px solid rgba(0, 255, 0, 0.18);
+  background: linear-gradient(180deg, var(--page-bg-1), var(--page-bg-2)) !important;
+  color: var(--text) !important;
+}
+
+/* Solar theme: make terminal commands and output visible and readable */
+.theme-solar .terminal-output-text,
+.theme-solar #terminal-input,
+.theme-solar .terminal-cmd,
+.theme-solar .terminal-line {
+  color: #2d2d2d !important;
+}
+
+.theme-solar .terminal {
+  background: linear-gradient(180deg, var(--panel-bg-1), var(--panel-bg-2)) !important;
+  border: var(--panel-border) !important;
+}
+
+.theme-solar .topbar,
+.theme-solar main,
+.theme-solar footer {
+  background: transparent !important;
+  color: var(--text) !important;
+}
+
+.theme-solar .controls select,
+.theme-solar .controls button {
+  color: var(--text) !important;
+  border-color: #ffb84d !important;
+}
+
+.theme-solar .brand {
+  color: #ff6b35 !important;
+}
+
+.theme-solar .terminal-link {
+  color: #ff6b35 !important;
+}
+
+.theme-solar .terminal-link:hover {
+  color: #ffb84d !important;
+}
+
+.theme-solar .highlight {
+  color: #ffb84d !important;
+}
+
+/* Night and Matrix theme: ensure all UI elements are visible and readable */
+body.theme-night .terminal,
+body.theme-matrix .terminal {
+  background: linear-gradient(180deg, var(--panel-bg-1), var(--panel-bg-2)) !important;
+  border: var(--panel-border) !important;
+}
+
+body.theme-night .topbar,
+body.theme-night main,
+body.theme-night footer,
+body.theme-matrix .topbar,
+body.theme-matrix main,
+body.theme-matrix footer {
+  background: transparent !important;
+  color: var(--text) !important;
+}
+
+body.theme-night .controls select,
+body.theme-night .controls button,
+body.theme-matrix .controls select,
+body.theme-matrix .controls button {
+  color: var(--text) !important;
+  border-color: var(--gold) !important;
+}
+
+body.theme-night .brand,
+body.theme-matrix .brand {
+  color: var(--accent) !important;
+}
+
+body.theme-night .terminal-link,
+body.theme-matrix .terminal-link {
+  color: var(--accent) !important;
+}
+
+body.theme-night .terminal-link:hover,
+body.theme-matrix .terminal-link:hover {
+  color: var(--gold) !important;
+}
+
+body.theme-night .highlight,
+body.theme-matrix .highlight {
+  color: var(--gold) !important;
+}
+
+/* Flipcard theme styles for inner card and card faces */
+/* .theme-solar #profile-3d-card .flip-card-inner, */
+.theme-solar #profile-3d-card .flip-card-front,
+.theme-solar #profile-3d-card .flip-card-back {
+  background: linear-gradient(135deg, #fff6ea 60%, #ffe7c7 100%) !important;
+  color: #2d2d2d !important;
+  border: 1.5px solid #ffb84d !important;
+}
+
+.theme-night #profile-3d-card .flip-card-inner,
+.theme-night #profile-3d-card .flip-card-front,
+.theme-night #profile-3d-card .flip-card-back {
+  /* background: linear-gradient(135deg, #222831 60%, #1a1c24 100%) !important; */
+  color: #e6f7e6 !important;
+  border: 1.5px solid #ffd700 !important;
+}
+
+.theme-matrix #profile-3d-card .flip-card-inner,
+.theme-matrix #profile-3d-card .flip-card-front,
+.theme-matrix #profile-3d-card .flip-card-back {
+  /* background: linear-gradient(135deg, #071013 60%, #04100a 100%) !important; */
+  color: #cfffcc !important;
+  border: 1.5px solid #66ff66 !important;
+}
+
+/* Theme-specific styles for theme dropdown (select) */
+.theme-solar .controls select {
+  background: #ffe7c7 !important;
+  color: #2d2d2d !important;
+  border: 1.5px solid #ffb84d !important;
+}
+
+.theme-night .controls select {
+  background: #222831 !important;
+  color: #e6f7e6 !important;
+  border: 1.5px solid #ffd700 !important;
+}
+
+.theme-matrix .controls select {
+  background: #071013 !important;
+  color: #cfffcc !important;
+  border: 1.5px solid #66ff66 !important;
+}
+
+/* Responsive media controls in header */
+.media-controls {
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-left: 16px;
+}
+
+.media-controls label {
+  font-weight: 600;
+  font-size: 0.98rem;
+}
+
+.media-controls select {
+  min-width: 110px;
+  font-size: 0.98rem;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+@media (max-width: 900px) {
+  .media-controls {
+    margin-left: 0;
+    gap: 8px;
+  }
+
+  .media-controls select {
+    min-width: 80px;
+    font-size: 0.97rem;
+  }
+
+  .media-controls label {
+    font-size: 0.97rem;
+  }
+}
+
+.modern-footer {
+  width: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.06));
+  color: var(--muted);
+  padding: 18px 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.02rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(6px);
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.footer-links {
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
+.footer-copyright {
+  font-size: 0.97rem;
+  color: var(--muted);
+  margin-top: 2px;
+  letter-spacing: 0.2px;
+}
+
+@media (max-width: 700px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.97rem;
+  }
+
+  .modern-footer {
+    font-size: 0.97rem;
+  }
+}
